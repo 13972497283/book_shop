@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/mvc
+           http://www.springframework.org/schema/mvc/spring-mvc.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context.xsd
+           http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop.xsd
+           ">
+<!--   扫描包-->
+    <context:component-scan base-package="cn.shop.controller"></context:component-scan>
+    <context:component-scan base-package="cn.shop.comment" />
+
+<!--    配置视图解析器-->
+    <bean id="internalResourceViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/"></property>
+        <property name="suffix" value=".jsp"></property>
+    </bean>
+
+    <!-- 设置静态资源不过滤 -->
+    <mvc:resources location="/css/" mapping="/css/**" />
+    <mvc:resources location="/images/" mapping="/images/**" />
+    <mvc:resources location="/index/" mapping="/index/css/**" />
+    <mvc:resources location="/admin/" mapping="/admin/**" />
+    <mvc:resources location="/js/" mapping="/js/**" />
+<!--    <mvc:resources location="/plugins/" mapping="/plugins/**" />-->
+
+    <!-- 开启对SpringMVC注解的支持 -->
+    <mvc:annotation-driven></mvc:annotation-driven>
+
+    <!--
+		支持AOP的注解支持，AOP底层使用代理技术
+		JDK动态代理，要求必须有接口
+		cglib代理，生成子类对象，proxy-target-class="true" 默认使用cglib的方式
+	-->
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+    <!-- 配置拦截器 -->
+
+    <!--    配置拦截器器-->
+<!--    <mvc:interceptors>-->
+<!--        <mvc:interceptor>-->
+<!--            &lt;!&ndash;            要拦截的方法&ndash;&gt;-->
+<!--            <mvc:mapping path="/**"/>-->
+<!--            &lt;!&ndash;            不拦截的方法&ndash;&gt;-->
+<!--                        <mvc:exclude-mapping path="/login.do"/>-->
+<!--                        <mvc:exclude-mapping path="/register.do"/>-->
+<!--            <bean class="cn.shop.interceptor.MyHandlerInterceptor"></bean>-->
+<!--        </mvc:interceptor>-->
+<!--    </mvc:interceptors>-->
+    <!-- 配置多媒体文件解析器 用于文件上传 -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- 设置上传文件的最大尺寸为5MB -->
+        <property name="maxUploadSize" value="5242880" />
+        <property name="defaultEncoding" value="utf-8" />
+    </bean>
+
+</beans>
